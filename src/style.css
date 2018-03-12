@@ -1,0 +1,157 @@
+h1, p {
+  font-family: "Trebuchet MS";
+  color: rgb(2, 45, 114);
+}
+
+.map {
+  height: 100%;
+  width: 100%;
+  position:absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.photocontainer {
+    border-radius: 9px;
+  position: fixed;
+  z-index: 1;
+  max-width: 25%;
+  width: 250px;
+
+  padding: 10px;
+  background-color:rgba(48, 92, 163,.4);
+  height: 95%;
+  right: 0%
+}
+.photocontainer img {
+  max-width: 95%;
+  max-height: 80%;
+}
+
+.selectedphotocontainer {
+  border-radius: 9px;
+  font-size: 0.7em;
+  position: fixed;
+  z-index: 2;
+  max-width: 30%;
+  margin: auto;
+  top: 20%;
+  padding: 10px;
+  background-color:rgba(48, 92, 163,.4);
+  height: auto;
+  left: 2%
+}
+.selectedphotocontainer img {
+  max-width: 95%;
+  max-height: 80%;
+}
+
+.photo {
+  opacity: 1
+}
+
+.createroombutton {
+  z-index: 3;
+  height: 200px;
+  width: 300px;
+  position: fixed;
+  left: 40%;
+  top: 40%;
+  background-color:rgba(48, 92, 163,.4);
+}
+
+.gameid {
+  border-radius: 9px;
+  font-size: 0.4em;
+  position: fixed;
+  z-index: 2;
+  width: auto;
+  margin: 20px auto 0;
+  padding: 10px;
+  background-color:rgba(48, 92, 163,.4);
+  height: auto;
+  left: 60%
+}
+
+
+.selectaphoto {
+  border-radius: 9px;
+  font-size: 0.4em;
+  position: fixed;
+  z-index: 3;
+  max-width: 10%;
+  margin: 20px auto 0;
+  padding: 10px;
+  background-color:rgba(48, 92, 163,.4);
+  height: auto;
+  left: 40%
+}
+
+
+
+#timer {
+  border-radius: 9px;
+  font-size: 0.4em;
+  position: fixed;
+  z-index: 3;
+  width: auto;
+  margin: 20px auto 0;
+  padding: 10px;
+  background-color:rgba(48, 92, 163,.4);
+  height: auto;
+  left: 40%;
+  top: 80%;
+}
+
+#message {
+  border-radius: 9px;
+  font-size: 0.4em;
+  position: fixed;
+  z-index: 3;
+  width: auto;
+  margin: 20px auto 0;
+  padding: 10px;
+  background-color:rgba(48, 92, 163,.4);
+  height: auto;
+  left: 40%;
+  top: 4%;
+}
+
+#results {
+  border-radius: 9px;
+  font-size: 0.6em;
+  position: fixed;
+  z-index: 3;
+  width: auto;
+  margin: 20px auto 0;
+  padding: 10px;
+  background-color: rgba(20, 112, 36,.6);
+  height: auto;
+  left: 40%;
+  top: 40%;
+  color: #ffffff;
+  border: 4px solid black;
+}
+
+#errormessage {
+  border-radius: 9px;
+  font-size: 0.6em;
+  position: fixed;
+  z-index: 3;
+  width: auto;
+  margin: 20px auto 0;
+  padding: 10px;
+  background-color:rgba(48, 92, 163,.4);
+  height: auto;
+  left: 40%;
+  top: 40%;
+}
+
+#startgamebutton {
+  font-size: 2em;
+  z-index: 3;
+  position: fixed;
+  left: 45%;
+  top: 30%
+}
