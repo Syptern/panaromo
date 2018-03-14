@@ -497,7 +497,29 @@ class Panaromo extends Component {
     distances.sort(function(a, b) {
       return a - b;
     });
-    console.log(distances);
+    const resultlist = () => {distances.map((e, i) => {
+      let message;
+      
+
+      guessedlocations.map((obj) => {
+        if (obj.location.distance && obj.location.distance === e) {
+          
+          message = (
+            <li style={i === 1 ? styles.firstplace : {}}>
+              {" "}
+               {obj.name}: {
+
+                 obj.location.distance > 1000 ? <span>{(obj.location.distance/1000).toFixed(1)}km </span> : <span> {obj.location.distance.toFixed(1)}m </span>
+                 
+                 }{" "}
+            </li>
+          );
+        }
+      });
+      return message;
+    })}
+    
+    
 
     return (
       <div>
@@ -632,23 +654,7 @@ class Panaromo extends Component {
 
               </h1>
               <ul>
-              {distances.map((e, i) => {
-                let message;
-                
-
-                guessedlocations.map((obj) => {
-                  if (obj.location.distance === e) {
-                    console.log('ja')
-                    message = (
-                      <li style={i === 1 ? styles.firstplace : {}}>
-                        {" "}
-                         {obj.name}: {obj.location.distance > 1000 ? <span>{(obj.location.distance/1000).toFixed(1)}km </span> : <span> {obj.location.distance.toFixed(1)}m </span>}{" "}
-                      </li>
-                    );
-                  }
-                });
-                return message;
-              })}
+              
               </ul>{" "}
             {" "}
           </div>
