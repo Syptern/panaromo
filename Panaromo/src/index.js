@@ -9,7 +9,7 @@ class Panaromo extends Component {
     super();
     this.state = {
       endpoint: "http://192.168.2.3:4001",
-      roominputvalue: null,
+      roominputvalue: "",
       nameinputvalue: "",
       gmarkers: [],
       currentPlaces: [],
@@ -27,12 +27,9 @@ class Panaromo extends Component {
       gamestate: "stopped",
       timer: 0,
       guessedlocations: [],
-      guesseddistances: [],
       photoselected: false,
       localguessedlocation: {},
-      timerrunning: false,
-      joinbuttonavailable: false,
-      createbuttonavailable: false
+      timerrunning: false
     };
   }
   componentWillMount() {
@@ -318,40 +315,15 @@ class Panaromo extends Component {
   }
 
   handleRoomInputChange(e) {
-    if (e.target.value.length === 3) {
-      this.setState({
-        ...this.state,
-        roominputvalue: e.target.value,
-        joinbuttonavailable: true
-      });
-    } else {
-      this.setState({
-        ...this.state,
-        roominputvalue: e.target.value,
-        joinbuttonavailable: false
-      });
-    }
+    this.setState({
+      roominputvalue: e.target.value
+    });
   }
 
   handleNameInputChange(e) {
     this.setState({
-      ...this.state,
       nameinputvalue: e.target.value
     });
-
-    if (e.target.value.length > 0) {
-      this.setState({
-        ...this.state,
-        createbuttonavailable: true,
-        nameinputvalue: e.target.value
-      });
-    } else {
-      this.setState({
-        ...this.state,
-        createbuttonavailable: false,
-        nameinputvalue: e.target.value
-      });
-    }
   }
 
   joinRoom() {
@@ -516,6 +488,17 @@ class Panaromo extends Component {
   }
 
   render() {
+    let { nameinputvalue, roominputvalue, guessedlocations } = this.state;
+    let joinbuttonavailable =
+      nameinputvalue.length > 0 && roominputvalue.length === 3;
+    let createbuttonavailable = nameinputvalue.length > 0;
+    let distances = [5];
+    guessedlocations.map(e => distances.push(e.location.distance))
+    distances.sort(function(a, b) {
+      return a - b;
+    });
+    console.log(distances);
+
     return (
       <div>
         {this.state.joined ? (
@@ -529,17 +512,19 @@ class Panaromo extends Component {
 
             <div className="gameid">
               {" "}
-              <h1> room: {this.state.currentroom.gameid} </h1>{" "}
+              <div id='room'> Room </div> <div id='roomnumber'> {this.state.currentroom.gameid} </div> {" "}
+              <ul>
               {this.state.players.map((e, i) => {
                 return (
                   <li key={i}>
                     <h1>
                       {" "}
-                      player {i + 1}: {e.name} ({e.role})
+                       {e.name} ({e.role})
                     </h1>{" "}
                   </li>
                 );
               })}{" "}
+              </ul>
             </div>
 
             {this.state.localplayer.role === "picker" &&
@@ -569,7 +554,7 @@ class Panaromo extends Component {
               this.state.gamestate === "started" ? (
                 <h1> Wait for the picker to pick a photo... </h1>
               ) : (
-                <h1> selected picture: </h1>
+                <h1> Selected Photo </h1>
               )}
               <img
                 id="selectedphoto"
@@ -588,7 +573,7 @@ class Panaromo extends Component {
         {!this.state.joined ? (
           <div className="loginfield">
             <input
-              style={styles.inputfield}
+              style={styles.nameinputfield}
               type="text"
               value={this.state.nameinputvalue}
               onChange={this.handleNameInputChange.bind(this)}
@@ -598,21 +583,21 @@ class Panaromo extends Component {
               style={Object.assign(
                 {},
                 styles.createbutton,
-                this.state.createbuttonavailable && styles.createbuttonenabled
+                createbuttonavailable && styles.createbuttonenabled
               )}
               onClick={e => {
-                if(this.state.createbuttonavailable){
-                this.createRoom();
-                e.preventDefault();
-                e.stopPropagation();
-              }}}
+                if (createbuttonavailable) {
+                  this.createRoom();
+                  e.preventDefault();
+                  e.stopPropagation();
+                }
+              }}
             >
-              
               Create
             </button>
 
             <input
-              style={styles.inputfield}
+              style={styles.roominputfield}
               type="number"
               value={this.state.roominputvalue}
               onChange={this.handleRoomInputChange.bind(this)}
@@ -623,10 +608,10 @@ class Panaromo extends Component {
               style={Object.assign(
                 {},
                 styles.joinbutton,
-                this.state.joinbuttonavailable && styles.joinbuttonenabled
+                joinbuttonavailable && styles.joinbuttonenabled
               )}
               onClick={e => {
-                if (this.state.joinbuttonavailable) {
+                if (joinbuttonavailable) {
                   this.joinRoom();
                   e.preventDefault();
                   e.stopPropagation();
@@ -643,19 +628,29 @@ class Panaromo extends Component {
             {" "}
             <h1>
               {" "}
-              Results:{" "}
-              {this.state.guessedlocations.map((obj, i) => (
-                <li>
-                  {" "}
-                  {obj.name}:{" "}
-                  {obj.location.distance >= 1000 ? (
-                    <p> {(obj.location.distance / 1000).toFixed(1)}km </p>
-                  ) : (
-                    <p> {obj.location.distance.toFixed(1)}m </p>
-                  )}{" "}
-                </li>
-              ))}{" "}
-            </h1>{" "}
+              Results{" "}
+
+              </h1>
+              <ul>
+              {distances.map((e, i) => {
+                let message;
+                
+
+                guessedlocations.map((obj) => {
+                  if (obj.location.distance === e) {
+                    console.log('ja')
+                    message = (
+                      <li style={i === 1 ? styles.firstplace : {}}>
+                        {" "}
+                         {obj.name}: {obj.location.distance > 1000 ? <span>{(obj.location.distance/1000).toFixed(1)}km </span> : <span> {obj.location.distance.toFixed(1)}m </span>}{" "}
+                      </li>
+                    );
+                  }
+                });
+                return message;
+              })}
+              </ul>{" "}
+            {" "}
           </div>
         ) : null}
         {this.state.gamestate === "no photo selected" ? (
@@ -680,8 +675,23 @@ class Panaromo extends Component {
 }
 
 const styles = {
-  inputfield: {
-    margin: 10,
+  firstplace: {
+    backgroundColor: 'rgb(155, 211, 133)'
+  },
+  nameinputfield: {
+    top: "10%",
+    margin: 15,
+    width: "70%",
+    outline: "none",
+    fontSize: 15,
+    padding: 10,
+    border: "none",
+    backgroundColor: "#ddd",
+    marginTop: 10
+  },
+  roominputfield: {
+    top: "10%",
+    margin: 15,
     width: "70%",
     outline: "none",
     fontSize: 15,
@@ -691,21 +701,24 @@ const styles = {
     marginTop: 10
   },
   joinbutton: {
-    margin: 10,
+    display: "inline-block",
+    margin: 5,
     width: 100,
     height: 40,
     border: "none",
     borderRadius: 4,
     fontSize: 20,
     transition: ".25s all",
-    backgroundColor: "rgba(160, 165, 157, 0.8)"
+    backgroundColor: "rgba(160, 165, 157, 0.8)",
+    border: "2px solid rgba(0, 0, 0, 0.5)"
   },
   joinbuttonenabled: {
     backgroundColor: "rgba(139, 204, 104, 0.8)",
-    width: 120
+    width: 120,
+    border: "2px solid green"
   },
   createbutton: {
-    margin: 10,
+    margin: 5,
     width: 100,
     height: 40,
     border: "none",
@@ -713,11 +726,13 @@ const styles = {
     fontSize: 20,
     cursor: "default",
     transition: ".25s all",
-    backgroundColor: "rgba(160, 165, 157, 0.8)"
+    backgroundColor: "rgba(160, 165, 157, 0.8)",
+    border: "2px solid rgba(0, 0, 0, 0.5)"
   },
   createbuttonenabled: {
     backgroundColor: "rgba(139, 204, 104, 0.8)",
-    width: 120
+    width: 120,
+    border: "2px solid green"
   }
 };
 
