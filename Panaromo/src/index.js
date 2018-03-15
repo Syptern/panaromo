@@ -8,7 +8,7 @@ class Panaromo extends Component {
   constructor() {
     super();
     this.state = {
-      endpoint: "http://192.168.2.3:4001",
+      endpoint: process.env.REACT_APP_API_URL,
       roominputvalue: "",
       nameinputvalue: "",
       gmarkers: [],

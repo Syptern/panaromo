@@ -2,7 +2,7 @@ const express = require('express')
 const http = require('http')
 const socketIO = require('socket.io')
 
-const port = 4001
+const port = process.env.PORT || 4001
 
 const app = express()
 
